@@ -1,65 +1,50 @@
-# French Vocab Native (Expo + React Native)
+# Expo Native App Template with Ads
 
-This starter converts your standalone HTML app into a **native-feeling React Native Android app** instead of wrapping the old UI in a WebView.
+This is an Android Expo template for turning standalone HTML/CSS/JavaScript apps into native React Native apps. The template keeps monetization in the shell: a low-interruption bottom banner ad plus a purchase option to remove ads.
 
-## What is already mapped from your HTML app
+## How it works
 
-- Home / Study / Finish screens
-- Broad category + subcategory filtering
-- Card count selection
-- Built-in French deck
-- JSON deck import
-- Persist imported deck locally on-device
-- Flip card animation
-- Auto-next countdown after reveal
-- French text-to-speech
-- Reset back to built-in deck
+- Converted app code starts at `src/apps/NativeAppScreen.tsx`.
+- Shared ads live in `src/components/AdBanner.tsx`.
+- The `Remove ads` and restore buttons live in `src/components/AppHeader.tsx`.
+- Purchase state is managed by RevenueCat in `src/purchases/PurchaseProvider.tsx`.
+- Conversion guidance is in `docs/CONVERTING_HTML_APPS.md`.
 
-## Recommended setup
+Native ads and purchases require an Expo development build or production build. They will not fully work in plain Expo Go.
 
-Create a new Expo TypeScript project:
+## First setup
 
-```bash
-npx create-expo-app@latest french-vocab-native --template blank-typescript
-cd french-vocab-native
+```sh
+npm install
+copy .env.example .env
+npm run android
 ```
 
-Install the native packages used by this conversion:
+For EAS builds:
 
-```bash
-npx expo install expo-linear-gradient expo-haptics expo-speech expo-document-picker expo-file-system react-native-safe-area-context @react-native-picker/picker
+```sh
+npx eas build --profile development --platform android
+npx eas build --profile production --platform android
 ```
 
-Then copy the files from this package into the new Expo project and run:
+## Per-app checklist
 
-```bash
-npx expo start
-```
+1. Copy this template for a new app.
+2. Copy `.env.example` to `.env`.
+3. Change `EXPO_PUBLIC_APP_NAME`, `EXPO_PUBLIC_APP_SLUG`, and `EXPO_PUBLIC_ANDROID_PACKAGE`.
+4. Convert the original HTML/CSS/JavaScript UI into React Native components under `src/apps/`.
+5. Replace the placeholder `NativeAppScreen` with the converted app entry screen.
+6. Replace the AdMob app ID and banner unit ID before release.
+7. Create a RevenueCat project connected to Google Play Billing.
+8. Create a non-consumable remove-ads product in Google Play Console.
+9. Attach that product to a RevenueCat offering and entitlement.
+10. Set `EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY` and `EXPO_PUBLIC_REMOVE_ADS_ENTITLEMENT_ID`.
+11. Build and test on Android.
 
-For Android emulator/device:
+## Notes
 
-```bash
-npx expo run:android
-```
+- Keep Google test ad IDs during development. Use real IDs only for release builds.
+- The banner requests non-personalized ads by default to keep the initial template conservative.
+- Google Play requires you to disclose that the app contains ads.
+- Keep ads outside individual app screens so every converted app gets the same purchase behavior.
 
-## Why this version feels more premium
-
-- Native `Pressable` interactions
-- Native `Animated` flip transition
-- Safe-area aware layout
-- Native gradients and shadows
-- Haptic feedback on important actions
-- Native document picker for deck import
-- Native speech instead of browser speech synthesis
-
-## Suggested next polish steps
-
-1. Add daily streaks and weak-word revision
-2. Add favorites / bookmarks
-3. Add quiz mode with score tracking
-4. Add dark/light theme toggle
-5. Add onboarding and app icon / splash screen
-
-## Important note
-
-The built-in vocabulary deck in `src/data/builtinDeck.ts` was extracted from your uploaded `index.html`, so you keep the original content while moving to a native app structure.
