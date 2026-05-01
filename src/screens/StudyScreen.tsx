@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import type { FlashCard } from '../types';
 import { AppButton } from '../components/AppButton';
@@ -62,7 +62,15 @@ export function StudyScreen({
         </View>
       </GlassPanel>
 
-      <Pressable onPress={onHome} style={styles.quitButton}>
+      <Pressable
+        onPress={() =>
+          Alert.alert('Quit session', 'Are you sure you want to quit and return to home?', [
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'Yes', onPress: onHome },
+          ])
+        }
+        style={styles.quitButton}
+      >
         <Text style={styles.quitText}>Quit to Home</Text>
       </Pressable>
     </View>
