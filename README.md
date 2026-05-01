@@ -9,6 +9,7 @@ This is an Android Expo template for turning standalone HTML/CSS/JavaScript apps
 - The `Remove ads` and restore buttons live in `src/components/AppHeader.tsx`.
 - Purchase state is managed by RevenueCat in `src/purchases/PurchaseProvider.tsx`.
 - Conversion guidance is in `docs/CONVERTING_HTML_APPS.md`.
+- Testing, troubleshooting, EAS build, and Google Play release steps are in `docs/TESTING_AND_RELEASE.md`.
 
 Native ads and purchases require an Expo development build or production build. They will not fully work in plain Expo Go.
 
@@ -27,6 +28,8 @@ npx eas build --profile development --platform android
 npx eas build --profile production --platform android
 ```
 
+For the full reusable test and release checklist, including Play Console publishing, see `docs/TESTING_AND_RELEASE.md`.
+
 ## Per-app checklist
 
 1. Copy this template for a new app.
@@ -39,7 +42,8 @@ npx eas build --profile production --platform android
 8. Create a non-consumable remove-ads product in Google Play Console.
 9. Attach that product to a RevenueCat offering and entitlement.
 10. Set `EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY` and `EXPO_PUBLIC_REMOVE_ADS_ENTITLEMENT_ID`.
-11. Build and test on Android.
+11. Build and test on Android with `docs/TESTING_AND_RELEASE.md`.
+12. Publish through EAS Build and Google Play Console with `docs/TESTING_AND_RELEASE.md`.
 
 ## Notes
 
