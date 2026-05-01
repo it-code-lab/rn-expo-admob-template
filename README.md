@@ -48,3 +48,26 @@ npx eas build --profile production --platform android
 - Google Play requires you to disclose that the app contains ads.
 - Keep ads outside individual app screens so every converted app gets the same purchase behavior.
 
+## Windows Android Build Troubleshooting
+
+If `npm run android` fails with `JAVA_HOME is not set and no 'java' command could be found`, point `JAVA_HOME` at a JDK. Android Studio includes one:
+
+```powershell
+[Environment]::SetEnvironmentVariable("JAVA_HOME", "C:\Program Files\Android\Android Studio\jbr", "User")
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Program Files\Android\Android Studio\jbr\bin", "User")
+```
+
+Close and reopen PowerShell, then check:
+
+```powershell
+java -version
+npm run android
+```
+
+For the current PowerShell window only, you can use:
+
+```powershell
+$env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
+$env:Path = "$env:JAVA_HOME\bin;$env:Path"
+npm run android
+```
