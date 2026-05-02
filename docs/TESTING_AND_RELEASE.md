@@ -22,6 +22,10 @@ Use this checklist after copying the template for a new Android app and before p
 7. Before release, create the RevenueCat project, product, offering, and entitlement, then set:
    - `EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY`
    - `EXPO_PUBLIC_REMOVE_ADS_ENTITLEMENT_ID`
+8. Before creating a new release, update the app version and build release number:
+   - In `app.config.ts`, update `version` to the next release version.
+   - If you maintain a committed `android/` directory, also update the Android `versionCode` in `android/app/build.gradle` or `app.config.ts` under `android.versionCode`.
+   - Rebuild the AAB with EAS after updating version values.
 
 ## Remove Ads setup
 
@@ -302,6 +306,15 @@ First release:
 11. Save and publish the internal testing release.
 12. Open the tester opt-in link on a test device and install from Google Play.
 13. Test ads, purchases, restore purchases, app launch, and the converted app flow from the Play-installed version.
+
+If closed testing is complete and you are ready for production access:
+
+- Update the app version before the next release in `app.config.ts`.
+- If you maintain a committed native `android/` folder, update the Android `versionCode` in `android/app/build.gradle` or `app.config.ts` under `android.versionCode`.
+- Build a new production AAB with EAS: `npx eas build --platform android --profile production --clear-cache`.
+- Upload the new AAB to the closed testing or production release track.
+- Add release notes, save, and publish the release.
+- Once the production release is published to the appropriate track, request production access or promote the release as needed.
 
 After internal testing passes, promote the release to closed testing or production from the Play Console release page.
 
