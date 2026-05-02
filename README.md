@@ -43,13 +43,30 @@ For the full reusable test and release checklist, including Play Console publish
    - `android/app/src/main/AndroidManifest.xml`: Expo dev-client scheme, if present
 5. Convert the original HTML/CSS/JavaScript UI into React Native components under `src/apps/`.
 6. Replace the placeholder `NativeAppScreen` with the converted app entry screen.
-7. Replace the AdMob app ID and banner unit ID before release. (This controls the ad banner display only.)
-8. Create a RevenueCat project connected to Google Play Billing. (Required for the remove-ads purchase flow.)
-9. Create a non-consumable remove-ads product in Google Play Console.
-10. Attach that product to a RevenueCat offering and entitlement.
-11. Set `EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY` and `EXPO_PUBLIC_REMOVE_ADS_ENTITLEMENT_ID`.
-12. Build and test on Android with `docs/TESTING_AND_RELEASE.md`.
-13. Publish through EAS Build and Google Play Console with `docs/TESTING_AND_RELEASE.md`.
+7. Set up the Remove Ads purchase flow.
+   - Google Play Console:
+     * Build an AAB with EAS: `npx eas build --platform android`.
+     * Upload the AAB to the Internal testing track.
+     * Go to Monetize > Products > One-time products.
+     * Click Create product.
+     * Set the Product ID (for example, `remove_ads_lifetime`), Name, Description, and Price.
+     * Save and activate the product.
+   - RevenueCat (shared project option):
+     * Open your existing RevenueCat project.
+     * Add a new Android app with the new package name (for example, `com.readernook.newapp`).
+     * Upload your Google Cloud Service Account JSON if prompted.
+     * Copy the new app's public API key (`goog_...`).
+     * Go to Product Setup > Products and click New.
+     * Enter the exact Google Play Product ID from the previous step.
+     * Go to Entitlements, open the existing `remove_ads` entitlement, and attach the new product.
+     * (Optional) Add the product to your default offering.
+   - App / `.env` configuration:
+     * Update `EXPO_PUBLIC_ANDROID_PACKAGE`.
+     * Update `EXPO_PUBLIC_ADMOB_ANDROID_APP_ID` and `EXPO_PUBLIC_ADMOB_BANNER_UNIT_ID`.
+     * Update `EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY` with the new key from RevenueCat.
+     * Keep `EXPO_PUBLIC_REMOVE_ADS_ENTITLEMENT_ID="remove_ads"`.
+8. Build and test on Android with `docs/TESTING_AND_RELEASE.md`.
+9. Publish through EAS Build and Google Play Console with `docs/TESTING_AND_RELEASE.md`.
 
 ## Notes
 

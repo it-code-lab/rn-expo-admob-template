@@ -23,6 +23,32 @@ Use this checklist after copying the template for a new Android app and before p
    - `EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY`
    - `EXPO_PUBLIC_REMOVE_ADS_ENTITLEMENT_ID`
 
+## Remove Ads setup
+
+1. Google Play Console
+   - Build an AAB with EAS: `npx eas build --platform android`.
+   - Upload the AAB to the Internal testing track.
+   - Go to Monetize > Products > One-time products.
+   - Click Create product.
+   - Set the Product ID (for example, `remove_ads_lifetime`), Name, Description, and Price.
+   - Save and activate the product.
+
+2. RevenueCat (shared project option)
+   - Open your existing RevenueCat project.
+   - Add a new Android app with the new package name (for example, `com.readernook.newapp`).
+   - Upload the Google Cloud Service Account JSON if prompted.
+   - Copy the new app's public API key (`goog_...`).
+   - Go to Product Setup > Products and click New.
+   - Enter the exact Google Play Product ID from Step 1.
+   - Go to Entitlements, open the existing `remove_ads` entitlement, and attach the new product.
+   - (Optional) Add the product to your default offering.
+
+3. App / `.env` configuration
+   - Update `EXPO_PUBLIC_ANDROID_PACKAGE`.
+   - Update `EXPO_PUBLIC_ADMOB_ANDROID_APP_ID` and `EXPO_PUBLIC_ADMOB_BANNER_UNIT_ID`.
+   - Update `EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY` with the new key from RevenueCat.
+   - Keep `EXPO_PUBLIC_REMOVE_ADS_ENTITLEMENT_ID="remove_ads"`.
+
 ## 2. Run local checks
 
 Run these from the project root:
