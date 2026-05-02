@@ -205,6 +205,14 @@ Expo production Android builds for Google Play are Android App Bundles (`.aab`).
    eas build:configure
    ```
 
+   If EAS creates the project but says it cannot write the project ID to dynamic config, copy the generated ID into `.env`:
+
+   ```properties
+   EAS_PROJECT_ID="your-eas-project-id"
+   ```
+
+   This template's `app.config.ts` reads that value into `extra.eas.projectId`.
+
 4. Build for Google Play:
 
    ```powershell

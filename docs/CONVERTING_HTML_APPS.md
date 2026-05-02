@@ -42,6 +42,16 @@ Keep pure JavaScript calculation code in `logic/` when possible. Convert only th
 
 The ad purchase state is already global, so converted apps do not need to know about ads unless a specific screen needs extra spacing or a custom monetization moment.
 
+## App Assets
+
+When converting a new HTML app, also update the app identity and asset files so the native build does not keep the template branding.
+
+- Update `.env` values such as `EXPO_PUBLIC_APP_NAME`, `EXPO_PUBLIC_APP_SLUG`, and `EXPO_PUBLIC_ANDROID_PACKAGE`.
+- Add or replace app artwork in an `assets/` folder, including the launcher icon, Android adaptive icon foreground, splash/background artwork if used, and any in-app images required by the converted screen.
+- Wire new app-level assets into `app.config.ts` with Expo config fields such as `icon`, `android.adaptiveIcon.foregroundImage`, `android.adaptiveIcon.backgroundColor`, and `splash` when those assets are present.
+- Keep generated source images outside build-only folders, and commit the final optimized PNG/WebP files that the app imports.
+- After changing app icons or splash assets, rebuild the native app. Expo config asset changes are not always fully reflected by a JavaScript reload.
+
 ## AI Conversion Prompt
 
 Use this prompt with the single-file HTML/CSS/JavaScript app as input. Paste the prompt first, then paste the full source file.
@@ -95,3 +105,49 @@ Output format:
 Now convert the following single-file HTML/CSS/JavaScript app:
 ```
 
+## AI Asset Generation Prompt
+
+Use this prompt when you need a downloadable asset pack for the converted app. Paste the prompt first, then describe the app's purpose, visual style, target audience, and any required colors or motifs.
+
+```text
+You are creating production-ready visual assets for an Expo Android React Native app converted from a standalone HTML/CSS/JavaScript app.
+
+Goal:
+- Generate a cohesive downloadable asset pack that replaces template branding.
+- The assets should feel native, polished, and specific to the app's actual purpose.
+- Avoid generic stock-app artwork, tiny unreadable text, and designs that only work on one background color.
+
+Required files:
+1. assets/icon.png
+   - 1024x1024 PNG
+   - Full app launcher icon
+   - No transparent outer padding unless the concept requires it
+2. assets/adaptive-icon-foreground.png
+   - 1024x1024 PNG with transparent background
+   - Main symbol centered with safe padding for Android adaptive icon masking
+3. assets/splash.png
+   - 2048x2048 PNG
+   - Centered mark or simple brand artwork suitable for a splash screen
+4. assets/feature-graphic.png
+   - 1024x500 PNG
+   - Store/listing-style promotional graphic without tiny body text
+5. Any in-app image assets needed by the converted React Native screen
+   - Use clear filenames under assets/app/
+   - Prefer PNG for UI art and WebP/JPEG for photo-like images
+
+Design constraints:
+- Use a clear, recognizable shape at small launcher-icon sizes.
+- Keep text out of the icon unless it is a short brand initial or symbol.
+- Make the adaptive icon foreground work on a configurable solid background color.
+- Include the recommended adaptive icon background color as a hex value.
+- Make the splash artwork simple enough to look good on small Android screens.
+- Use a visual style that matches the app, not the template.
+
+Output format:
+1. Provide a zip file or downloadable files with the exact filenames above.
+2. Provide a short manifest listing each file, dimensions, format, and intended use.
+3. Provide the recommended `app.config.ts` asset configuration snippet.
+4. If any assets are meant to be imported by `src/apps/NativeAppScreen.tsx`, list the import paths.
+
+App description:
+```

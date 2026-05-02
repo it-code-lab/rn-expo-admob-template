@@ -1,6 +1,7 @@
 {
   "cli": {
-    "version": ">= 15.0.0"
+    "version": ">= 15.0.0",
+    "appVersionSource": "remote"
   },
   "build": {
     "development": {
@@ -19,6 +20,13 @@
     "production": {
       "autoIncrement": true
     }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "./google-key.json",
+        "track": "alpha"
+      }
+    }
   }
 }
-
