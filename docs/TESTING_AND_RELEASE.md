@@ -9,9 +9,17 @@ Use this checklist after copying the template for a new Android app and before p
    - `EXPO_PUBLIC_APP_NAME`
    - `EXPO_PUBLIC_APP_SLUG`
    - `EXPO_PUBLIC_ANDROID_PACKAGE`
-3. During development, keep the Google test AdMob app ID and banner unit ID.
-4. Before release, replace the AdMob IDs with the real app ID and banner unit ID.
-5. Before release, create the RevenueCat project, product, offering, and entitlement, then set:
+3. Confirm `app.config.ts` falls back to the intended Android package name. This matters because `.env` is usually not committed.
+4. If this project has a committed or copied `android/` directory, update the native Android identity to match `EXPO_PUBLIC_ANDROID_PACKAGE`:
+   - `android/app/build.gradle`: `namespace` and `defaultConfig.applicationId`
+   - `android/app/src/main/java/<package path>/MainActivity.kt`
+   - `android/app/src/main/java/<package path>/MainApplication.kt`
+   - `android/app/src/main/res/values/strings.xml`
+   - `android/settings.gradle`
+   - `android/app/src/main/AndroidManifest.xml` dev-client scheme, if present
+5. During development, keep the Google test AdMob app ID and banner unit ID.
+6. Before release, replace the AdMob IDs with the real app ID and banner unit ID.
+7. Before release, create the RevenueCat project, product, offering, and entitlement, then set:
    - `EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY`
    - `EXPO_PUBLIC_REMOVE_ADS_ENTITLEMENT_ID`
 
@@ -31,6 +39,7 @@ Confirm:
 - TypeScript has no errors.
 - Expo Doctor passes.
 - The public config shows the expected app name, slug, Android package, billing permission, AdMob IDs, and RevenueCat values.
+- If `android/` exists, Gradle and the generated APK use the same package as Expo public config.
 
 ## 3. Build and smoke test on Android
 
@@ -60,10 +69,22 @@ To install the generated APK manually:
 & "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" devices
 & "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" install -r android\app\build\outputs\apk\debug\app-debug.apk
 & "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" reverse tcp:8081 tcp:8081
-& "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" shell am start -n com.yourcompany.myhtmlapp/.MainActivity
+& "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" shell am start -n your.android.package/.MainActivity
 ```
 
-Replace `com.yourcompany.myhtmlapp` with the package name from `.env`.
+Replace `your.android.package` with the package name from `.env`.
+
+To verify the package embedded in a local APK:
+
+```powershell
+& "$env:LOCALAPPDATA\Android\Sdk\build-tools\36.0.0\aapt.exe" dump badging android\app\build\outputs\apk\debug\app-debug.apk
+```
+
+The first line should include the exact Play Console package, for example:
+
+```text
+package: name='com.readernook.fourinarow'
+```
 
 ## 4. Manual app checks
 
@@ -216,8 +237,10 @@ Expo production Android builds for Google Play are Android App Bundles (`.aab`).
 4. Build for Google Play:
 
    ```powershell
-   eas build --platform android --profile production
+   eas build --platform android --profile production --clear-cache
    ```
+
+   Use `--clear-cache` after changing package name, native Android identity, icons, splash assets, or other generated native metadata.
 
 5. Download the `.aab` from the EAS build page when the build completes.
 
@@ -234,6 +257,8 @@ First release:
 1. Create a paid Google Play Developer account if you do not already have one.
 2. In Google Play Console, create a new app.
 3. Use the same Android package name as `EXPO_PUBLIC_ANDROID_PACKAGE`.
+   - Google Play package names cannot be changed after the app is created.
+   - If Play says the APK or App Bundle needs a different package name, fix `EXPO_PUBLIC_ANDROID_PACKAGE`, `app.config.ts`, and the native Android files listed in section 1, then rebuild with `--clear-cache`.
 4. Complete the required Play Console setup items:
    - App access
    - Ads declaration

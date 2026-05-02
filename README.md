@@ -35,15 +35,21 @@ For the full reusable test and release checklist, including Play Console publish
 1. Copy this template for a new app.
 2. Copy `.env.example` to `.env`.
 3. Change `EXPO_PUBLIC_APP_NAME`, `EXPO_PUBLIC_APP_SLUG`, and `EXPO_PUBLIC_ANDROID_PACKAGE`.
-4. Convert the original HTML/CSS/JavaScript UI into React Native components under `src/apps/`.
-5. Replace the placeholder `NativeAppScreen` with the converted app entry screen.
-6. Replace the AdMob app ID and banner unit ID before release.
-7. Create a RevenueCat project connected to Google Play Billing.
-8. Create a non-consumable remove-ads product in Google Play Console.
-9. Attach that product to a RevenueCat offering and entitlement.
-10. Set `EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY` and `EXPO_PUBLIC_REMOVE_ADS_ENTITLEMENT_ID`.
-11. Build and test on Android with `docs/TESTING_AND_RELEASE.md`.
-12. Publish through EAS Build and Google Play Console with `docs/TESTING_AND_RELEASE.md`.
+4. If the copied app includes an `android/` directory, update the native Android identity too:
+   - `android/app/build.gradle`: `namespace` and `defaultConfig.applicationId`
+   - `android/app/src/main/java/.../MainActivity.kt` and `MainApplication.kt`: package declaration and folder path
+   - `android/app/src/main/res/values/strings.xml`: `app_name`
+   - `android/settings.gradle`: `rootProject.name`
+   - `android/app/src/main/AndroidManifest.xml`: Expo dev-client scheme, if present
+5. Convert the original HTML/CSS/JavaScript UI into React Native components under `src/apps/`.
+6. Replace the placeholder `NativeAppScreen` with the converted app entry screen.
+7. Replace the AdMob app ID and banner unit ID before release.
+8. Create a RevenueCat project connected to Google Play Billing.
+9. Create a non-consumable remove-ads product in Google Play Console.
+10. Attach that product to a RevenueCat offering and entitlement.
+11. Set `EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY` and `EXPO_PUBLIC_REMOVE_ADS_ENTITLEMENT_ID`.
+12. Build and test on Android with `docs/TESTING_AND_RELEASE.md`.
+13. Publish through EAS Build and Google Play Console with `docs/TESTING_AND_RELEASE.md`.
 
 ## Notes
 
@@ -51,6 +57,7 @@ For the full reusable test and release checklist, including Play Console publish
 - The banner requests non-personalized ads by default to keep the initial template conservative.
 - Google Play requires you to disclose that the app contains ads.
 - Keep ads outside individual app screens so every converted app gets the same purchase behavior.
+- Google Play package names are immutable after the app is created. Make sure `EXPO_PUBLIC_ANDROID_PACKAGE`, Expo public config, and any committed native Android project all use the exact same value before the first Play Console upload.
 
 ## Windows Android Build Troubleshooting
 

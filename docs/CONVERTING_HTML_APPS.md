@@ -47,6 +47,13 @@ The ad purchase state is already global, so converted apps do not need to know a
 When converting a new HTML app, also update the app identity and asset files so the native build does not keep the template branding.
 
 - Update `.env` values such as `EXPO_PUBLIC_APP_NAME`, `EXPO_PUBLIC_APP_SLUG`, and `EXPO_PUBLIC_ANDROID_PACKAGE`.
+- If the project already has an `android/` directory, update its native identity as well. EAS may build the native project directly, so `app.config.ts` alone is not enough:
+  - `android/app/build.gradle`: `namespace` and `defaultConfig.applicationId`
+  - `android/app/src/main/java/<package path>/MainActivity.kt`
+  - `android/app/src/main/java/<package path>/MainApplication.kt`
+  - `android/app/src/main/res/values/strings.xml`
+  - `android/settings.gradle`
+  - `android/app/src/main/AndroidManifest.xml` dev-client scheme, if present
 - Add or replace app artwork in an `assets/` folder, including the launcher icon, Android adaptive icon foreground, splash/background artwork if used, and any in-app images required by the converted screen.
 - Wire new app-level assets into `app.config.ts` with Expo config fields such as `icon`, `android.adaptiveIcon.foregroundImage`, `android.adaptiveIcon.backgroundColor`, and `splash` when those assets are present.
 - Keep generated source images outside build-only folders, and commit the final optimized PNG/WebP files that the app imports.

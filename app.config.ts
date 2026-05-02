@@ -12,7 +12,10 @@ const config: ExpoConfig = {
   platforms: ["android"],
   android: {
     package: androidPackage,
-    permissions: ["com.android.vending.BILLING"]
+    permissions: [
+      "com.android.vending.BILLING",
+      "com.google.android.gms.permission.AD_ID",
+    ],
   },
   plugins: [
     [
