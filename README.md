@@ -43,8 +43,8 @@ For the full reusable test and release checklist, including Play Console publish
    - `android/app/src/main/AndroidManifest.xml`: Expo dev-client scheme, if present
 5. Convert the original HTML/CSS/JavaScript UI into React Native components under `src/apps/`.
 6. Replace the placeholder `NativeAppScreen` with the converted app entry screen.
-7. Replace the AdMob app ID and banner unit ID before release.
-8. Create a RevenueCat project connected to Google Play Billing.
+7. Replace the AdMob app ID and banner unit ID before release. (This controls the ad banner display only.)
+8. Create a RevenueCat project connected to Google Play Billing. (Required for the remove-ads purchase flow.)
 9. Create a non-consumable remove-ads product in Google Play Console.
 10. Attach that product to a RevenueCat offering and entitlement.
 11. Set `EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY` and `EXPO_PUBLIC_REMOVE_ADS_ENTITLEMENT_ID`.
@@ -53,6 +53,7 @@ For the full reusable test and release checklist, including Play Console publish
 
 ## Notes
 
+- **AdMob vs RevenueCat:** Updating AdMob IDs alone only affects ad display. The remove-ads purchase requires a separate RevenueCat configuration with an entitlement. Without `EXPO_PUBLIC_REVENUECAT_ANDROID_API_KEY`, the app will show "Purchases not configured" when users tap Remove ads.
 - Keep Google test ad IDs during development. Use real IDs only for release builds.
 - The banner requests non-personalized ads by default to keep the initial template conservative.
 - Google Play requires you to disclose that the app contains ads.
